@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: FreshPrice
+Version: 0.0.1
+Summary: PRedicting freshness based pricing
+Home-page: UNKNOWN
+Author: SakshamGulati
+License: UNKNOWN
+Project-URL: Bug Tracker, 
+Description: # FreshPrice
+        This app will allow you to price an item based on how fresh it is
+        
+        The idea is to look at a perishable product and fix price based on how fresh it is
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown

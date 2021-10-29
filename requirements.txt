@@ -1,0 +1,5 @@
+#requirements
+python-dotenv
+selenium
+pandas
+numpy

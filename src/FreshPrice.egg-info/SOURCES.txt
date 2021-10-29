@@ -1,0 +1,9 @@
+README.md
+setup.py
+src/DataOps/ImageCrawler.py
+src/DataOps/__init__.py
+src/FreshPrice.egg-info/PKG-INFO
+src/FreshPrice.egg-info/SOURCES.txt
+src/FreshPrice.egg-info/dependency_links.txt
+src/FreshPrice.egg-info/requires.txt
+src/FreshPrice.egg-info/top_level.txt
