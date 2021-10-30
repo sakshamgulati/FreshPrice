@@ -7,18 +7,27 @@ import PIL
 from PIL import Image
 import hashlib
 from selenium import webdriver
+import logging
+import confuse
 
-class selenium_driver():
+
+class selenium_driver:
     """
     This class crawls the web for given search string and returns images saved in memory
-
     """
-    def __init__(self):
-        self.DRIVER_PATH = 'C:/Users/saksh/PycharmProjects/FreshPrice/FreshPrice/Resources/Selenium/chromedriver.exe'
+
+    def __init__(self, config_file="./FreshPrice/conf/DataOps/imagecrawler.yaml"):
+
+        self.logger = logging.getLogger(__name__)
+        self.config = confuse.Configuration("FreshPrice", __name__)
+        self.config.set_file(config_file)
+        self.DRIVER_PATH = self.config["DRIVER_PATH"].get(str)
+
         self.wd = webdriver.Chrome(executable_path=self.DRIVER_PATH)
 
     @staticmethod
     def fetch_image_urls(query: str, max_links_to_fetch: int, wd: webdriver, sleep_between_interactions: int = 1):
+        print("Fetching images for: ",query,sep="/n")
 
         def scroll_to_end(wd):
             wd.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -77,6 +86,8 @@ class selenium_driver():
 
     @staticmethod
     def persist_image(folder_path: str, url: str):
+        print("converting and saving urls to images",sep="/n")
+
         try:
             image_content = requests.get(url).content
 
@@ -93,17 +104,16 @@ class selenium_driver():
         except Exception as e:
             print(f"ERROR - Could not save {url} - {e}")
 
-
-    @staticmethod
-    def search_and_download(search_term: str, driver_path: str, target_path='./FreshPrice/Data/Image_data', number_images=100):
+    def search_and_download(self, search_term: str, target_path='./FreshPrice/Data/Image_data',
+                            number_images=100):
         target_folder = os.path.join(target_path, '_'.join(search_term.lower().split(' ')))
 
         if not os.path.exists(target_folder):
             os.makedirs(target_folder)
 
-        with webdriver.Chrome(executable_path=driver_path) as wd:
+        with webdriver.Chrome(executable_path=self.DRIVER_PATH) as wd:
             res = selenium_driver.fetch_image_urls(search_term, number_images, wd=wd, sleep_between_interactions=0.5)
 
         for elem in res:
             selenium_driver.persist_image(target_folder, elem)
-        wd.quit()
+        print("Images saved!")

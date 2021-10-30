@@ -1,0 +1,23 @@
+conda_packages:
+  - 'python=3.7.10'
+  - "scikit-learn"
+  - "scipy"
+  - "pandas"
+  - "pip"
+  - "matplotlib"
+pip_packages:
+  - "azureml-defaults"
+  - "azureml-dataprep[pandas]"
+  - "numpy<=1.18.5"
+  - "joblib"
+  - "pyarrow"
+  - "Unidecode"
+  - "seaborn"
+  - "click==7.1.2"
+  - "spacy"
+  - "pyarrow"
+  - "confuse"
+
+
+input_files_folder: "search_input_files"
+DRIVER_PATH: "C:/Users/saksh/PycharmProjects/FreshPrice/FreshPrice/Resources/Selenium/chromedriver.exe"
