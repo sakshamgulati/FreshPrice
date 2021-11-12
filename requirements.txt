@@ -3,3 +3,4 @@ python-dotenv
 selenium
 pandas
 numpy
+pre-commit

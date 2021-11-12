@@ -13,9 +13,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="",
-    project_urls={
-        "Bug Tracker": "",
-    },
+    project_urls={"Bug Tracker": ""},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
@@ -23,7 +21,7 @@ setuptools.setup(
     install_requires=external_packages,
     package_dir={"": "src"},
     packages=setuptools.find_namespace_packages(where="src"),
-    package_data={'': ['*.yaml']},
+    package_data={"": ["*.yaml"]},
     include_package_data=True,
     python_requires=">=3.7",
 )

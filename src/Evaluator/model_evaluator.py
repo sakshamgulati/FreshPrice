@@ -1,10 +1,12 @@
 from Model.Base import model
 from Preprocessor.ImagePreprocessor import *
 
+
 class model_evaluator:
     """
     This class is used to evaluate the performance of the model
     # """
+
     # TODO: Create module for evaluator
     # IMG_WIDTH = 200
     # IMG_HEIGHT = 200

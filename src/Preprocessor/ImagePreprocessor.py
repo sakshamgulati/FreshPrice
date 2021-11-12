@@ -34,11 +34,15 @@ class preprocessor:
                 image_path = os.path.join(img_folder, dir1, file)
                 image = cv2.imread(image_path, cv2.COLOR_BGR2RGB)
                 try:
-                    image = cv2.resize(image, (self.IMG_HEIGHT, self.IMG_WIDTH), interpolation=cv2.INTER_AREA)
+                    image = cv2.resize(
+                        image,
+                        (self.IMG_HEIGHT, self.IMG_WIDTH),
+                        interpolation=cv2.INTER_AREA,
+                    )
                 except:
                     break
                 image = np.array(image)
-                image = image.astype('float64')
+                image = image.astype("float64")
                 image /= 255
                 img_data_array.append(image)
                 class_name.append(dir1)
@@ -50,4 +54,3 @@ class preprocessor:
             return 1
         else:
             return 0
-
