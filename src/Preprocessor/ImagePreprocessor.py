@@ -1,6 +1,5 @@
 import logging
 import confuse
-import os
 
 import numpy as np
 import os
@@ -14,6 +13,9 @@ class preprocessor:
     """
 
     def __init__(self, config_file="./FreshPrice/conf/ML/preprocessor.yaml"):
+        logging.basicConfig(
+            filename="./FreshPrice/Output/preprocessor.log", level=logging.INFO
+        )
         self.logger = logging.getLogger(__name__)
         self.IMG_WIDTH = 200
         self.IMG_HEIGHT = 200
@@ -21,17 +23,21 @@ class preprocessor:
         self.config.set_file(config_file)
         self.img_folder = self.config["img_folder"].get(str)
 
-    def create_dataset(self, img_folder):
+    def create_dataset(self):
+        """
+        this module preprocesses various input images and resizes them to be input for CNNs
+        :return: preprocessed image data and corresponding data labels
+        """
 
         img_data_array = []
         class_name = []
 
         for dir1 in os.listdir(self.img_folder):
             print("Collecting images for: ", dir1)
-            self.logger.info("Image preprocessing step started")
-            for file in os.listdir(os.path.join(img_folder, dir1)):
+            self.logger.info("Image preprocessing step started for:", dir1)
+            for file in os.listdir(os.path.join(self.img_folder, dir1)):
 
-                image_path = os.path.join(img_folder, dir1, file)
+                image_path = os.path.join(self.img_folder, dir1, file)
                 image = cv2.imread(image_path, cv2.COLOR_BGR2RGB)
                 try:
                     image = cv2.resize(
@@ -41,8 +47,9 @@ class preprocessor:
                     )
                 except:
                     break
+                    self.logger.error("Image preprocessing has an error for:", dir1)
                 image = np.array(image)
-                image = image.astype("float64")
+                image = image.astype("float32")
                 image /= 255
                 img_data_array.append(image)
                 class_name.append(dir1)

@@ -1,19 +1,51 @@
 from Model.Base import model
 from Preprocessor.ImagePreprocessor import *
+from sklearn.metrics import accuracy_score
+
+from sklearn.metrics import classification_report
+import confuse
 
 
 class model_evaluator:
     """
     This class is used to evaluate the performance of the model
+    :param- test data file
+
+    Output- Accuracy score for the model
+
     # """
 
-    # TODO: Create module for evaluator
-    # IMG_WIDTH = 200
-    # IMG_HEIGHT = 200
-    # img_folder = '/content/drive/MyDrive/Freshprice/Image_data/test/'
-    #
-    # # extract the image array and class name
-    # img_data_test, class_name_test = create_dataset('/content/drive/MyDrive/Freshprice/Image_data/test/')
-    # img_data_test = np.array(img_data_test)
-    # class_name_test = list(map(product_mapping, class_name_test))
-    # class_name_test = np.array(class_name_test)
+    def __init__(self, config_file="./FreshPrice/conf/ML/preprocessor.yaml"):
+        logging.basicConfig(
+            filename="./FreshPrice/Output/model_evaluator.log", level=logging.INFO
+        )
+        self.logger = logging.getLogger(__name__)
+        self.IMG_WIDTH = 200
+        self.IMG_HEIGHT = 200
+        self.config = confuse.Configuration("FreshPrice", __name__)
+        self.config.set_file(config_file)
+        self.img_folder_test = self.config["img_folder_test"].get(str)
+        self.img_data_test, self.class_name_test_raw = preprocessor.create_dataset(
+            self.img_folder_test
+        )
+        self.class_name_test = np.array(
+            list(map(preprocessor.product_mapping(), self.class_name_test_raw))
+        )
+
+    def model_predict(self):
+        preds = model.predict(self.img_data_test).round().astype(int)
+        flat_pred = [item for sublist in preds for item in sublist]
+
+        accuracy = accuracy_score(self.class_name_test, flat_pred)
+        print("The Accuracy is: %2f" % accuracy)
+        self.logger.info("Accuracy of the model", accuracy)
+        print(
+            "classification report is:",
+            classification_report(self.class_name_test, flat_pred),
+        )
+        self.logger.info(
+            "Classification report:",
+            classification_report(self.class_name_test, flat_pred),
+        )
+
+        return accuracy

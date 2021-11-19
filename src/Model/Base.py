@@ -1,5 +1,5 @@
-from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
+from tensorflow.keras.models import Sequential
 
 
 class model:
@@ -12,12 +12,13 @@ class model:
     """
 
     @staticmethod
-    def model(img_data, class_name, epochs):
+    def model_trainer(img_data, class_name, epochs):
 
         model_object = Sequential()
         model_object.add(
             Conv2D(28, kernel_size=(3, 3), input_shape=(200, 200, 3), activation="relu")
         )
+
         model_object.add(Conv2D(64, kernel_size=(3, 3), activation="relu"))
         model_object.add(MaxPooling2D(pool_size=(2, 2)))
         model_object.add(Conv2D(128, kernel_size=(2, 2), activation="relu"))
@@ -30,13 +31,15 @@ class model:
         model_object.compile(
             optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"]
         )
+        print("model fitting underway...Please expect some delay")
         model_object.fit(x=img_data, y=class_name, epochs=epochs)
+        print("model training completed!")
 
         return model_object
 
     @staticmethod
-    def model_saver(model):
+    def model_saver(model_obj):
         try:
-            model.save(".FreshPrice/output/my_model")
+            model_obj.save(".FreshPrice/output/my_model")
         except:
             print("Model not saved successfully!")

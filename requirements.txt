@@ -4,3 +4,5 @@ selenium
 pandas
 numpy
 pre-commit
+tensorflow
+opencv-python

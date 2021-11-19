@@ -12,6 +12,7 @@ Description: # FreshPrice
         The idea is to look at a perishable product and fix price based on how fresh it is
 
         JIRA Board -https://sakshamgulati.atlassian.net/jira/software/projects/FRES/boards/1
+
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent
