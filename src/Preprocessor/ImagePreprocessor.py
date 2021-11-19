@@ -23,21 +23,22 @@ class preprocessor:
         self.config.set_file(config_file)
         self.img_folder = self.config["img_folder"].get(str)
 
-    def create_dataset(self):
+    def create_dataset(self, img_folder):
         """
         this module preprocesses various input images and resizes them to be input for CNNs
+        :argument: image folder where all the images are kept for training and testing
         :return: preprocessed image data and corresponding data labels
         """
 
         img_data_array = []
         class_name = []
 
-        for dir1 in os.listdir(self.img_folder):
+        for dir1 in os.listdir(img_folder):
             print("Collecting images for: ", dir1)
             self.logger.info("Image preprocessing step started for:", dir1)
-            for file in os.listdir(os.path.join(self.img_folder, dir1)):
+            for file in os.listdir(os.path.join(img_folder, dir1)):
 
-                image_path = os.path.join(self.img_folder, dir1, file)
+                image_path = os.path.join(img_folder, dir1, file)
                 image = cv2.imread(image_path, cv2.COLOR_BGR2RGB)
                 try:
                     image = cv2.resize(

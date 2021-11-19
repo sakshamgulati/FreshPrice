@@ -11,7 +11,7 @@ class model_evaluator:
     This class is used to evaluate the performance of the model
     :param- test data file
 
-    Output- Accuracy score for the model
+    :return- Accuracy score for the model
 
     # """
 
@@ -25,11 +25,12 @@ class model_evaluator:
         self.config = confuse.Configuration("FreshPrice", __name__)
         self.config.set_file(config_file)
         self.img_folder_test = self.config["img_folder_test"].get(str)
-        self.img_data_test, self.class_name_test_raw = preprocessor.create_dataset(
+        p = preprocessor()
+        self.img_data_test, self.class_name_test_raw = p.create_dataset(
             self.img_folder_test
         )
         self.class_name_test = np.array(
-            list(map(preprocessor.product_mapping(), self.class_name_test_raw))
+            list(map(lambda p: p.product_mapping(p), self.class_name_test_raw))
         )
 
     def model_predict(self):

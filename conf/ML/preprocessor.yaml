@@ -21,4 +21,4 @@ pip_packages:
 
 input_files_folder: "search_input_files"
 img_folder: "C:/Users/saksh/PycharmProjects/FreshPrice/FreshPrice/Data/Image_data/train"
-#img_folder_test: "C:\Users\saksh\PycharmProjects\FreshPrice\FreshPrice\Data\Image_data\test"
+img_folder_test: "C:/Users/saksh/PycharmProjects/FreshPrice/FreshPrice/Data/Image_data/test"
