@@ -5,3 +5,7 @@ numpy
 pre-commit
 tensorflow
 opencv-python
+matplotlib
+statsmodels
+sklearn
+confuse
