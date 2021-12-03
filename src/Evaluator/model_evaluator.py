@@ -50,3 +50,7 @@ class model_evaluator:
         )
 
         return accuracy
+
+    def model_predict_proba(self):
+        return model.predict(self.img_data_test)
+
