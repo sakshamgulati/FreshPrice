@@ -1,6 +1,6 @@
 from DataOps import selenium_driver
 
-search_term = ["over riped avacados", "unriped avacados"]
+search_term = ["over riped whole avocados", "unriped whole avocados"]
 
 image_crawler = selenium_driver()
 for items in search_term:

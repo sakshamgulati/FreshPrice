@@ -58,7 +58,7 @@ class preprocessor:
 
     @staticmethod
     def product_mapping(a):
-        if a == "over_riped_bananas":
+        if a == "over_riped_whole_avocados":
             return 1
         else:
             return 0
