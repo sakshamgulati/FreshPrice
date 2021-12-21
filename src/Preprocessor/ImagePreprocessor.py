@@ -13,10 +13,6 @@ class preprocessor:
     """
 
     def __init__(self, config_file="./FreshPrice/conf/ML/preprocessor.yaml"):
-        logging.basicConfig(
-            filename="./FreshPrice/Output/preprocessor.log", level=logging.INFO
-        )
-        self.logger = logging.getLogger(__name__)
         self.IMG_WIDTH = 200
         self.IMG_HEIGHT = 200
         self.config = confuse.Configuration("FreshPrice", __name__)
@@ -35,7 +31,6 @@ class preprocessor:
 
         for dir1 in os.listdir(img_folder):
             print("Collecting images for: ", dir1)
-            self.logger.info("Image preprocessing step started for:", dir1)
             for file in os.listdir(os.path.join(img_folder, dir1)):
 
                 image_path = os.path.join(img_folder, dir1, file)
@@ -48,7 +43,6 @@ class preprocessor:
                     )
                 except:
                     break
-                    self.logger.error("Image preprocessing has an error for:", dir1)
                 image = np.array(image)
                 image = image.astype("float32")
                 image /= 255
@@ -58,7 +52,7 @@ class preprocessor:
 
     @staticmethod
     def product_mapping(a):
-        if a == "over_riped_bananas":
+        if a == "over_riped_whole_avocados":
             return 1
         else:
             return 0

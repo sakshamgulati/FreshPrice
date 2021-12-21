@@ -40,6 +40,6 @@ class model:
     @staticmethod
     def model_saver(model_obj):
         try:
-            model_obj.save(".FreshPrice/output/my_model")
+            model_obj.save("./FreshPrice/Output/my_model.h5")
         except:
             print("Model not saved successfully!")

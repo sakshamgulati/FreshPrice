@@ -1,0 +1,6 @@
+*.h5
+.DS_Store
+Output/
+*.log
+Output/my_model.h5
+#adding something here

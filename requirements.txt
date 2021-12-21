@@ -10,3 +10,4 @@ matplotlib
 statsmodels
 sklearn
 confuse
+streamlit

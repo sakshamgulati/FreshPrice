@@ -25,16 +25,19 @@ class model_evaluator:
         self.config = confuse.Configuration("FreshPrice", __name__)
         self.config.set_file(config_file)
         self.img_folder_test = self.config["img_folder_test"].get(str)
-        p = preprocessor()
-        self.img_data_test, self.class_name_test_raw = p.create_dataset(
+        self.p = preprocessor()
+        self.img_data_test, self.class_name_test_raw = self.p.create_dataset(
             self.img_folder_test
         )
+
         self.class_name_test = np.array(
-            list(map(lambda p: p.product_mapping(p), self.class_name_test_raw))
+            list(
+                map(lambda item: self.p.product_mapping(item), self.class_name_test_raw)
+            )
         )
 
-    def model_predict(self):
-        preds = model.predict(self.img_data_test).round().astype(int)
+    def model_predict(self, mymodel):
+        preds = mymodel.predict(self.img_data_test).round().astype(int)
         flat_pred = [item for sublist in preds for item in sublist]
 
         accuracy = accuracy_score(self.class_name_test, flat_pred)
@@ -51,6 +54,5 @@ class model_evaluator:
 
         return accuracy
 
-    def model_predict_proba(self):
-        return model.predict(self.img_data_test)
-
+    def model_predict_proba(self, mymodel):
+        return mymodel.predict(self.img_data_test)
