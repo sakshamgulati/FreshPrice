@@ -1,6 +1,6 @@
 import streamlit as st
 from PIL import Image, ImageOps
-import numpy as np
+
 from tensorflow import keras
 from Model.price_elasticity import *
 
