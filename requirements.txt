@@ -1,7 +1,7 @@
 #requirements
 selenium==4.0.0
 pandas==1.2.4
-numpy== 1.18.5
+numpy== 1.19.3
 tensorflow==2.7.0
 opencv-python==4.5.4.58
 statsmodels==0.12.2
