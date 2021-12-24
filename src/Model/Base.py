@@ -1,5 +1,7 @@
 from tensorflow.keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
 from tensorflow.keras.models import Sequential
+from Model.pruning import *
+import tempfile
 
 
 class model:
@@ -13,26 +15,42 @@ class model:
 
     @staticmethod
     def model_trainer(img_data, class_name, epochs):
+        def model_func():
+            model_object = Sequential()
+            model_object.add(
+                Conv2D(
+                    28, kernel_size=(3, 3), input_shape=(200, 200, 3), activation="relu"
+                )
+            )
 
-        model_object = Sequential()
-        model_object.add(
-            Conv2D(28, kernel_size=(3, 3), input_shape=(200, 200, 3), activation="relu")
-        )
+            model_object.add(Conv2D(64, kernel_size=(3, 3), activation="relu"))
+            model_object.add(MaxPooling2D(pool_size=(2, 2)))
+            # model_object.add(Conv2D(128, kernel_size=(2, 2), activation="relu"))
+            # model_object.add(Conv2D(128, kernel_size=(2, 2), activation="relu"))
+            model_object.add(Flatten())
+            model_object.add(Dense(64, activation="relu"))
+            model_object.add(Dropout(0.2))
+            model_object.add(Dense(1, activation="sigmoid"))
+            return model_object
 
-        model_object.add(Conv2D(64, kernel_size=(3, 3), activation="relu"))
-        model_object.add(MaxPooling2D(pool_size=(2, 2)))
-        model_object.add(Conv2D(128, kernel_size=(2, 2), activation="relu"))
-        model_object.add(Conv2D(128, kernel_size=(2, 2), activation="relu"))
-        model_object.add(Flatten())
-        model_object.add(Dense(256, activation="relu"))
-        model_object.add(Dropout(0.2))
-        model_object.add(Dense(1, activation="sigmoid"))
+        model_object = model_func()
+        model_for_pruning = prune_low_magnitude(model_object, **pruning_params)
 
-        model_object.compile(
+        model_for_pruning.compile(
             optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"]
         )
+
+        logdir = tempfile.mkdtemp()
+
+        callbacks = [
+            tfmot.sparsity.keras.UpdatePruningStep(),
+            tfmot.sparsity.keras.PruningSummaries(log_dir=logdir),
+        ]
+
         print("model fitting underway...Please expect some delay")
-        model_object.fit(x=img_data, y=class_name, epochs=epochs)
+        model_for_pruning.fit(
+            x=img_data, y=class_name, epochs=epochs, callbacks=callbacks
+        )
         print("model training completed!")
 
         return model_object

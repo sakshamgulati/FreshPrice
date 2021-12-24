@@ -11,3 +11,4 @@ statsmodels
 sklearn
 confuse
 streamlit
+tensorflow_model_optimization
