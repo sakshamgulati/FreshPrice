@@ -18,7 +18,7 @@ print("the datatype for labels has been changed from string to: ", type(y))
 base_model = model()
 start = time.time()
 
-trained_model = base_model.model_trainer(X, y, 1)
+trained_model = base_model.model_trainer(X, y, 10)
 end = time.time()
 
 print("Model Training completed in(seconds): ", end - start)
