@@ -1,14 +1,12 @@
 #requirements
-python-dotenv
-selenium
-pandas
-numpy
-pre-commit
-tensorflow
-opencv-python
-matplotlib
-statsmodels
-sklearn
-confuse
-streamlit
-tensorflow_model_optimization
+selenium==4.0.0
+pandas==1.2.4
+numpy== 1.18.5
+tensorflow==2.7.0
+opencv-python==4.5.4.58
+statsmodels==0.12.2
+sklearn==0.24.1
+confuse==1.5.0
+streamlit==1.2.0
+tensorflow_model_optimization==0.7.0
+streamlit==1.2.0
