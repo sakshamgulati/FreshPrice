@@ -1,9 +1,9 @@
 #requirements
 pandas==1.2.4
 numpy== 1.19.3
-#tensorflow==2.7.0
-opencv-python==4.5.4.58
+tensorflow-cpu
+opencv-python-headless
 statsmodels==0.12.2
-#sklearn==0.0
+sklearn==0.0
 confuse==1.5.0
 streamlit==1.2.0
