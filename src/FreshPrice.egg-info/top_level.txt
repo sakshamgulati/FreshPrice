@@ -1,4 +1,0 @@
-DataOps
-Evaluator
-Model
-Preprocessor
