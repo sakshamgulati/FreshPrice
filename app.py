@@ -78,7 +78,7 @@ def model_training():
     :param input- dataframe containing prices and volumes
     :return: elasticity of the product
     """
-    data = pd.read_csv("./Data/Price-Sales Volume/avocado.csv")
+    data = pd.read_csv("avocado.csv")
     print("data loaded with: ", data.shape)
     data_ref = data.copy()
     data_ref = data_ref[["AveragePrice", "Total Volume"]]
