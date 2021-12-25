@@ -148,14 +148,7 @@ if uploaded_file is not None:
             perc_change_price, perc_quantity_change
         )
     )
-    if perc_quantity_change >= 0:
-        st.image(
-            "./FreshPrice/Resources/Images/increase.png", caption="Increased Sales!"
-        )
-    else:
-        st.image(
-            "./FreshPrice/Resources/Images/decrease.png", caption="Decreased Sales!"
-        )
+    
     st.write(
         """
     ## Price-Quantity Calculator
