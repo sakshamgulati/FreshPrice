@@ -1,8 +1,10 @@
 import streamlit as st
 from PIL import Image, ImageOps
-import numpy as np
 from tensorflow import keras
-from Model.price_elasticity import *
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+import statsmodels.api as sm
 
 
 st.title("FreshPrice")
@@ -70,9 +72,52 @@ def classifier(img, weights_file):
     return prediction, prediction_percentage
 
 
+def model_training():
+    """
+    This method is used to ingest,transform and fit an OLS to get the elasticity
+    :param input- dataframe containing prices and volumes
+    :return: elasticity of the product
+    """
+    data = pd.read_csv("./FreshPrice/Data/Price-Sales Volume/avocado.csv")
+    print("data loaded with: ", data.shape)
+    data_ref = data.copy()
+    data_ref = data_ref[["AveragePrice", "Total Volume"]]
+    grp_data_ref = (
+        data_ref.groupby(["Total Volume", "AveragePrice"]).count().reset_index()
+    )
+    del data_ref
+    # Bifurcating into input and output
+    X = grp_data_ref.drop(["Total Volume"], axis=1)
+    y = grp_data_ref["Total Volume"]
+
+    # Adding constant for the OLS
+    X = sm.add_constant(X)
+    # Split into train and test
+    x_train, x_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=1
+    )
+
+    # Fitting the OLS model
+    olsmodel = sm.OLS(y_train, x_train).fit()
+    print(olsmodel.summary())
+
+    # Calculating the mean price and quantity
+    mean_price = np.mean(x_train["AveragePrice"])
+    mean_quantity = np.mean(y_train)
+    print("mean price: ", mean_price)
+    print("mean quantity: ", mean_quantity)
+
+    intercept, slope = olsmodel.params
+    print("slope:", slope)
+
+    price_elasticity = (slope) * (mean_price / mean_quantity)
+    return price_elasticity
+
+
 uploaded_file = st.file_uploader(
     "Please upload a JPG image to be evaluated:", type="jpg"
 )
+
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
@@ -93,8 +138,8 @@ if uploaded_file is not None:
     pred_optimal_price = f(perc[0][0]).round(2)
 
     st.text("Optimal Price(Based on Freshness) : ${}".format(pred_optimal_price))
-    elasticity = pe_model()
-    elastic_affect = elasticity.model_training()
+
+    elastic_affect = model_training()
     # st.text("Elasticity:{:.2f}".format(elastic_affect))
     perc_change_price = ((pred_optimal_price - optimal_price) / optimal_price) * 100
     perc_quantity_change = perc_change_price * elastic_affect
