@@ -1,3 +1,0 @@
-input_files_folder: "search_input_files"
-DRIVER_PATH: "C:/Users/saksh/PycharmProjects/FreshPrice/FreshPrice/Resources/Selenium/chromedriver.exe"
-elasticity_data: "./FreshPrice/Data/Price-Sales Volume/avocado.csv"
