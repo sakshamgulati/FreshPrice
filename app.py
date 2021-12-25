@@ -78,7 +78,7 @@ def model_training():
     :param input- dataframe containing prices and volumes
     :return: elasticity of the product
     """
-    data = pd.read_csv("/app/avocado.csv")
+    data = pd.read_csv("./app/avocado.csv")
     print("data loaded with: ", data.shape)
     data_ref = data.copy()
     data_ref = data_ref[["AveragePrice", "Total Volume"]]
@@ -124,7 +124,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    label, perc = classifier(image, "/app/my_model.h5")
+    label, perc = classifier(image, "./app/my_model.h5")
     if label == 1:
         st.write("Its a over-riped Avocado")
     else:
