@@ -124,7 +124,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    label, perc = classifier(image, 'Output/my_model.h5')
+    label, perc = classifier(image, "my_model.h5")
     if label == 1:
         st.write("Its a over-riped Avocado")
     else:
@@ -148,7 +148,7 @@ if uploaded_file is not None:
             perc_change_price, perc_quantity_change
         )
     )
-    
+
     st.write(
         """
     ## Price-Quantity Calculator
