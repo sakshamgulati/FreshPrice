@@ -124,7 +124,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    label, perc = classifier(image, "https://github.com/sakshamgulati/FreshPrice/blob/30b6caa0ea18eef98317a2b4a1062d216cf21386/Output/my_model.h5")
+    label, perc = classifier(image, 'Output/my_model.h5')
     if label == 1:
         st.write("Its a over-riped Avocado")
     else:
