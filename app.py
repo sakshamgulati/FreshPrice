@@ -5,7 +5,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
-from pathlib import Path
+import os
+from tensorflow.keras.models import load_model
 
 st.title("FreshPrice")
 st.write(
@@ -18,6 +19,9 @@ Created by Saksham Gulati
 
 """
 )
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+st.write(dir_path)
 
 salvage_price = st.number_input(
     "Please input the price of an over riped avocado (could be salvage price) :",
@@ -35,7 +39,6 @@ underriped_price = st.number_input(
     step=0.01,
 )
 
-
 optimal_price = st.number_input(
     "Please input the price of an optimal avocado :",
     min_value=0.01,
@@ -48,7 +51,8 @@ optimal_price = st.number_input(
 @st.cache(allow_output_mutation=True)
 def classifier(img, weights_file):
     # Load the model
-    model = keras.models.load_model(weights_file)
+
+    model = load_model(weights_file)
 
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
@@ -78,8 +82,8 @@ def model_training():
     :param input- dataframe containing prices and volumes
     :return: elasticity of the product
     """
-    avocado_file = Path(__file__).parent / "avocado.csv"
-    data = pd.read_csv(avocado_file)
+
+    data = pd.read_csv("avocado.csv")
     print("data loaded with: ", data.shape)
     data_ref = data.copy()
     data_ref = data_ref[["AveragePrice", "Total Volume"]]
@@ -119,13 +123,12 @@ uploaded_file = st.file_uploader(
     "Please upload a JPG image to be evaluated:", type="jpg"
 )
 
-
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    model_file = Path(__file__).parent / "my_model.h5"
+    model_file = "my_model.h5"
     label, perc = classifier(image, model_file)
     if label == 1:
         st.write("Its a over-riped Avocado")
