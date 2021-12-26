@@ -5,8 +5,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
-import os
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 
 st.title("FreshPrice")
 st.write(
@@ -19,7 +18,6 @@ Created by Saksham Gulati
 
 """
 )
-dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 salvage_price = st.number_input(
@@ -51,7 +49,7 @@ optimal_price = st.number_input(
 def classifier(img, weights_file):
     # Load the model
 
-    model = load_model(weights_file)
+    model = tf.lite.TFLiteConverter.from_keras_model(weights_file)
 
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
@@ -82,7 +80,7 @@ def model_training():
     :return: elasticity of the product
     """
 
-    avocado_file = dir_path + "/avocado.csv"
+    avocado_file = "avocado.csv"
     data = pd.read_csv(avocado_file)
     print("data loaded with: ", data.shape)
     data_ref = data.copy()
@@ -128,7 +126,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    model_file = dir_path + "/my_model.h5"
+    model_file = "my_model.h5"
     label, perc = classifier(image, model_file)
     if label == 1:
         st.write("Its a over-riped Avocado")
