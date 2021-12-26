@@ -21,7 +21,6 @@ Created by Saksham Gulati
 )
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-st.write(dir_path)
 
 salvage_price = st.number_input(
     "Please input the price of an over riped avocado (could be salvage price) :",
@@ -83,7 +82,8 @@ def model_training():
     :return: elasticity of the product
     """
 
-    data = pd.read_csv("avocado.csv")
+    avocado_file = dir_path + "/avocado.csv"
+    data = pd.read_csv(avocado_file)
     print("data loaded with: ", data.shape)
     data_ref = data.copy()
     data_ref = data_ref[["AveragePrice", "Total Volume"]]
@@ -128,7 +128,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    model_file = "my_model.h5"
+    model_file = dir_path + "/my_model.h5"
     label, perc = classifier(image, model_file)
     if label == 1:
         st.write("Its a over-riped Avocado")
