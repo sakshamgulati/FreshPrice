@@ -48,10 +48,9 @@ optimal_price = st.number_input(
 @st.cache(allow_output_mutation=True)
 def classifier(img, weights_file):
     # Load the model
-    with tf.device("/cpu:0"):
-        model = tf.keras.models.load_model("my_model.h5")
 
-    # model = tf.lite.TFLiteConverter.from_keras_model(weights_file)
+    converter = tf.lite.TFLiteConverter.from_keras_model("my_model.h5")
+    tflite_model = converter.convert()
 
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
@@ -69,7 +68,7 @@ def classifier(img, weights_file):
     data[0] = normalized_image_array
 
     # run the inference
-    prediction_percentage = model.predict(data)
+    prediction_percentage = tflite_model.predict(data)
     prediction = prediction_percentage.round()
 
     return prediction, prediction_percentage
