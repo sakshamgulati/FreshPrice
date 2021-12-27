@@ -49,7 +49,8 @@ optimal_price = st.number_input(
 def classifier(img, weights_file):
     # Load the model
 
-    converter = tf.lite.TFLiteConverter.from_keras_model("my_model.h5")
+    model = tf.keras.models.load_model("my_model.h5")
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
     tflite_model = converter.convert()
 
     # Create the array of the right shape to feed into the keras model
