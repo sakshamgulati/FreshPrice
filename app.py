@@ -48,28 +48,28 @@ optimal_price = st.number_input(
 @st.cache(allow_output_mutation=True)
 def classifier(img, weights_file):
     # Load the model
-    with tf.device("/cpu:0"):
-        model = tf.keras.models.load_model("my_model.h5")
 
-        # model = tf.lite.TFLiteConverter.from_keras_model("my_model.h5")
-        # Create the array of the right shape to feed into the keras model
-        data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
-        image = img
-        # image sizing
-        size = (200, 200)
-        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+    model = tf.keras.models.load_model("my_model")
 
-        # turn the image into a numpy array
-        image_array = np.asarray(image)
-        # Normalize the image
-        normalized_image_array = image_array.astype(np.float32) / 255
+    # model = tf.lite.TFLiteConverter.from_keras_model("my_model.h5")
+    # Create the array of the right shape to feed into the keras model
+    data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
+    image = img
+    # image sizing
+    size = (200, 200)
+    image = ImageOps.fit(image, size, Image.ANTIALIAS)
 
-        # Load the image into the array
-        data[0] = normalized_image_array
+    # turn the image into a numpy array
+    image_array = np.asarray(image)
+    # Normalize the image
+    normalized_image_array = image_array.astype(np.float32) / 255
 
-        # run the inference
-        prediction_percentage = model.predict(data)
-        prediction = prediction_percentage.round()
+    # Load the image into the array
+    data[0] = normalized_image_array
+
+    # run the inference
+    prediction_percentage = model.predict(data)
+    prediction = prediction_percentage.round()
 
     return prediction, prediction_percentage
 
