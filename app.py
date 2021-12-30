@@ -49,9 +49,8 @@ optimal_price = st.number_input(
 def classifier(img, weights_file):
     # Load the model
 
-    model = tf.saved_model.load("my_model")
+    model = tf.keras.models.load_model("my_model")
 
-    # model = tf.lite.TFLiteConverter.from_keras_model("my_model.h5")
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
     image = img
@@ -68,7 +67,13 @@ def classifier(img, weights_file):
     data[0] = normalized_image_array
 
     # run the inference
-    prediction_percentage = model.predict(data)
+
+    predict_dataset = tf.convert_to_tensor(np.array(normalized_image_array))
+
+    # training=False is needed only if there are layers with different
+    # behavior during training versus inference (e.g. Dropout).
+    predictions = model(predict_dataset, training=False)
+    prediction_percentage = predictions.numpy()[0][0]
     prediction = prediction_percentage.round()
 
     return prediction, prediction_percentage
