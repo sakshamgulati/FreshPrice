@@ -49,7 +49,7 @@ optimal_price = st.number_input(
 def classifier(img, weights_file):
     # Load the model
 
-    model = tf.saved_model.load("./my_model")
+    model = tf.saved_model.load("my_model")
 
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
