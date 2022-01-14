@@ -1,9 +1,10 @@
 #requirements
 pandas==1.2.4
 numpy== 1.19.3
-tensorflow-cpu
-opencv-python-headless
+Pillow==8.2.0
 statsmodels==0.12.2
 sklearn==0.0
-confuse==1.5.0
 streamlit==1.2.0
+json5==0.9.5
+jsonschema==3.2.0
+requests==2.25.1

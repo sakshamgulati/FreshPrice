@@ -1,11 +1,11 @@
 import streamlit as st
 from PIL import Image, ImageOps
-from tensorflow import keras
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
-import tensorflow as tf
+import json
+import requests
 
 st.title("FreshPrice")
 st.write(
@@ -46,37 +46,48 @@ optimal_price = st.number_input(
 
 
 @st.cache(allow_output_mutation=True)
-def classifier(img, weights_file):
+def get_img(img):
     # Load the model
-
-    model = tf.keras.models.load_model("/my_model/1/")
-
     # Create the array of the right shape to feed into the keras model
     data = np.ndarray(shape=(1, 200, 200, 3), dtype=np.float32)
-    image = img
+    image_loaded = img
+    print("Image loaded")
     # image sizing
     size = (200, 200)
-    image = ImageOps.fit(image, size, Image.ANTIALIAS)
+    image_loaded = ImageOps.fit(image_loaded, size, Image.ANTIALIAS)
 
     # turn the image into a numpy array
-    image_array = np.asarray(image)
+    image_array = np.asarray(image_loaded)
     # Normalize the image
     normalized_image_array = image_array.astype(np.float32) / 255
+    normalized_image_array = np.expand_dims(normalized_image_array, 0)
+    print("Image resized")
 
     # Load the image into the array
     data[0] = normalized_image_array
 
     # run the inference
+    return normalized_image_array
 
-    predict_dataset = tf.convert_to_tensor(np.array(normalized_image_array))
 
-    # training=False is needed only if there are layers with different
-    # behavior during training versus inference (e.g. Dropout).
-    predictions = model(predict_dataset, training=False)
-    prediction_percentage = predictions.numpy()[0][0]
-    prediction = prediction_percentage.round()
+def classifier(img):
+    """
+    this function calls to the container based at Heroku and returns the predictions
 
-    return prediction, prediction_percentage
+    :return: probability of the classified image
+    """
+
+    data = json.dumps({"signature_name": "serving_default", "instances": img.tolist()})
+    headers = {"content-type": "application/json"}
+
+    json_response = requests.post(
+        "http://freshprice.herokuapp.com/v1/models/model:predict",
+        data=data,
+        headers=headers,
+    )
+    predictions = json.loads(json_response.text)["predictions"]
+
+    return predictions[0][0]
 
 
 def model_training():
@@ -129,12 +140,13 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
+    img_array = get_img(image)
     st.image(image, caption="Uploaded file", use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    model_file = "my_model.h5"
-    label, perc = classifier(image, model_file)
-    if label == 1:
+
+    perc = classifier(img_array)
+    if perc > 0.5:
         st.write("Its a over-riped Avocado")
     else:
         st.write("Its an under-riped Avocado!")
@@ -144,7 +156,7 @@ if uploaded_file is not None:
 
     z = np.polyfit(x, y, 3)
     f = np.poly1d(z)
-    pred_optimal_price = f(perc[0][0]).round(2)
+    pred_optimal_price = f(perc).round(2)
 
     st.text("Optimal Price(Based on Freshness) : ${}".format(pred_optimal_price))
 
